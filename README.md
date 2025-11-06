@@ -24,6 +24,20 @@ MD5: 482c811da5d5b4bc6d497ffa98491e38
 SHA-256: ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f
 ```
 
+**Better formatted:**
+
+```
+╔════════════════════════════════════════════════════════════╗
+║                    Hash Tool Output                        ║
+╠════════════════════════════════════════════════════════════╣
+║ Input: password123                                         ║
+║                                                            ║
+║ MD5:    482c811da5d5b4bc6d497ffa98491e38                  ║
+║ SHA-1:  cbfdac6008b823a6aa265df0b01c37df88e4f8a4          ║
+║ SHA-256: ef92b778bafe771e89245b89ecbc08a44a4e166c06659...║
+╚════════════════════════════════════════════════════════════╝
+```
+
 **Note:** MD5 and SHA-1 are cryptographically broken but included for legacy system compatibility.
 
 ### 2. Port Scanner (Go)
@@ -45,6 +59,85 @@ Scanning 192.168.1.1 from port 1 to 1000...
 [+] Port 443 is OPEN
 
 Scan complete. Found 3 open ports in 2.3s
+```
+
+**With banner grabbing:**
+
+```
+╔══════════════════════════════════════════════════════════════════╗
+║                   Port Scanner Results                       ║
+╠══════════════════════════════════════════════════════════════════╣
+║ Target: 192.168.1.1 | Scanning ports 1-1000                 ║
+║                                                              ║
+║ [+] Port 22 is OPEN  - ssh                                   ║
+║     Banner: SSH-2.0-OpenSSH_8.2p1 Ubuntu-4ubuntu0.5          ║
+║                                                              ║
+║ [+] Port 80 is OPEN  - http                                  ║
+║     Banner: Server: nginx/1.18.0 (Ubuntu)                    ║
+║                                                              ║
+║ [+] Port 443 is OPEN - https                                 ║
+║     Banner: Server: nginx/1.18.0 (Ubuntu)                    ║
+║                                                              ║
+║ Scan complete. Found 3 open ports in 2.3s                    ║
+╚══════════════════════════════════════════════════════════════════╝
+```
+
+## Network Diagram
+
+How the port scanner works in a typical scan:
+
+```
+                    Port Scanner Workflow
+
+╭────────────────╮
+│   Your PC       │
+│ (127.0.0.1)    │
+╰───────┬───────╯
+       │
+       │ Runs: go run port_scanner.go
+       │ -host 192.168.1.1 -start 1 -end 1000
+       │
+       │
+       v
+╭────────────────╮
+│ Port Scanner   │
+│   (Go Tool)    │
+╰───────┬───────╯
+       │
+       │ Concurrent goroutines
+       │ scanning each port
+       │
+       v
+╭──────────────────────────────╮
+│   Target Network         │
+│   (192.168.1.1)          │
+│                          │
+│  ╭────────────────╮  │
+│  │  Port 22:OPEN  │  │ ← SSH Server
+│  ╰────────────────╯  │
+│                          │
+│  ╭────────────────╮  │
+│  │  Port 80:OPEN  │  │ ← Web Server (HTTP)
+│  ╰────────────────╯  │
+│                          │
+│  ╭────────────────╮  │
+│  │  Port 443:OPEN │  │ ← Web Server (HTTPS)
+│  ╰────────────────╯  │
+│                          │
+│  ╭────────────────╮  │
+│  │ Port 3306:OPEN│  │ ← MySQL Database
+│  ╰────────────────╯  │
+╰──────────────────────────────╯
+
+       ^
+       │
+       │ Results returned with
+       │ banner information
+       │
+╭────────────────╮
+│  Your Terminal  │
+│  (Output shown) │
+╰────────────────╯
 ```
 
 **Limitations:**
