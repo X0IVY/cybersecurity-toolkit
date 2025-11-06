@@ -1,82 +1,106 @@
 # 🔒 Cybersecurity Toolkit
 
-A comprehensive cybersecurity toolkit for network analysis, vulnerability scanning, and security auditing. Built with Python.
+A collection of network security tools I built while learning penetration testing and network analysis. Currently focused on reconnaissance and enumeration.
 
-## 📋 Overview
+## Tools
 
-This toolkit provides a collection of security tools designed for ethical hacking, penetration testing, and network security analysis. Perfect for security professionals, students, and researchers.
+### 1. Hash Generator (Python)
+Generates cryptographic hashes for files and text strings. Useful for integrity checking and forensics.
 
-## ✨ Features
-
-- **Network Scanner**: Discover active hosts and open ports on a network
-- **Vulnerability Scanner**: Identify common security vulnerabilities
-- **Password Analyzer**: Evaluate password strength and security
-- **Traffic Monitor**: Analyze network traffic patterns
-- **Security Audit**: Generate comprehensive security reports
-
-## 🛠️ Planned Modules
-
-- Port Scanner with service detection
-- Web application vulnerability scanner
-- Encryption/Decryption utilities
-- Log analyzer for security events
-- Automated penetration testing framework
-
-## 🚀 Installation
+**Supports:** MD5, SHA-1, SHA-256, SHA-512
 
 ```bash
-# Clone the repository
+python hash_tools.py
+# Interactive menu:
+# 1. Hash text
+# 2. Hash file  
+# 3. Exit
+```
+
+**Example output:**
+```
+Enter text: password123
+MD5: 482c811da5d5b4bc6d497ffa98491e38
+SHA-256: ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f
+```
+
+**Note:** MD5 and SHA-1 are cryptographically broken but included for legacy system compatibility.
+
+### 2. Port Scanner (Go)
+Fast concurrent TCP port scanner using goroutines. Scans ranges of ports to find open services.
+
+```bash
+go run port_scanner.go <host> <start_port> <end_port>
+
+# Example:
+go run port_scanner.go 192.168.1.1 1 1000
+```
+
+**Example output:**
+```
+Scanning 192.168.1.1 from port 1 to 1000...
+
+[+] Port 22 is OPEN
+[+] Port 80 is OPEN
+[+] Port 443 is OPEN
+
+Scan complete. Found 3 open ports in 2.3s
+```
+
+**Limitations:**
+- 1 second timeout per port (can miss slow services)
+- No service detection yet
+- TCP only, no UDP support
+
+## Installation
+
+```bash
+# Clone repo
 git clone https://github.com/X0IVY/cybersecurity-toolkit.git
 cd cybersecurity-toolkit
 
-# Install dependencies
+# Python dependencies
 pip install -r requirements.txt
+
+# Go (make sure Go is installed)
+go version  # should be 1.16+
 ```
 
-## 📖 Usage
+## Roadmap
 
-```python
-# Example usage coming soon
-```
+- [ ] Add banner grabbing to port scanner
+- [ ] Service version detection
+- [ ] Export scan results to JSON/CSV
+- [ ] Build simple vulnerable web app for testing
+- [ ] Add subdomain enumeration tool
 
-## 🗂️ Project Structure
+## Legal Disclaimer
 
-```
-cybersecurity-toolkit/
-├── src/
-│   ├── scanner/
-│   ├── analyzer/
-│   └── utils/
-├── tests/
-├── docs/
-├── requirements.txt
-└── README.md
-```
+**IMPORTANT:** These tools are for authorized security testing only.
 
-## 🔧 Technologies
+- Only scan networks/systems you own or have explicit written permission to test
+- Unauthorized port scanning is illegal in many jurisdictions
+- I'm not responsible for misuse of these tools
 
-- Python 3.8+
-- Scapy (Network manipulation)
-- Requests (HTTP library)
-- BeautifulSoup (Web scraping)
-- Colorama (Terminal styling)
+If you're learning, set up your own lab environment (VirtualBox VMs, Docker containers, etc.)
 
-## ⚠️ Legal Disclaimer
+## Learning Resources
 
-This toolkit is intended for educational purposes and authorized security testing only. Users are responsible for complying with applicable laws and regulations. Unauthorized access to computer systems is illegal.
+While building this, I learned from:
+- TryHackMe (network fundamentals)
+- OWASP testing guides
+- Go concurrency patterns documentation
 
-## 📝 License
+## Known Issues
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+- Port scanner can trigger IDS/IPS systems (too fast/not stealthy)
+- Hash tool doesn't handle very large files efficiently (loads entire file into memory)
+- No progress indicator on long scans
 
-## 🤝 Contributing
+## License
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+MIT License - see LICENSE file
 
-## 📧 Contact
+## Contact
 
-For questions or suggestions, please open an issue on GitHub.
-
----
-
-**Note**: This project is currently in early development. More features and documentation coming soon!
+For questions or suggestions, open an issue.
