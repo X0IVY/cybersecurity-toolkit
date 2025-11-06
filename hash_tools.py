@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # quick hash tool i made for the toolkit
 # supports md5, sha1, sha256, sha512
+# TODO: add sha3 support later
+# TODO: should probably chunk large files instead of reading all at once
 
 import hashlib
 from colorama import Fore, init
@@ -39,6 +41,7 @@ def hash_file(filepath, hash_type='sha256'):
         with open(filepath, 'rb') as f:
             while True:
                 data = f.read(4096)
+                                # reads in 4k chunks, works ok for now
                 if not data:
                     break
                 h.update(data)
